@@ -1,0 +1,55 @@
+
+#include <dht.h>
+dht DHT;
+
+#define DHT11_PIN 7
+ 
+void setup()
+{
+  Serial.begin(9600);
+  
+}
+void loop()
+{
+  
+     HUMIDITY_MONITOR();
+     SMOKE();
+      
+        
+}
+
+void HUMIDITY_MONITOR()
+{
+     int chk = DHT.read11(DHT11_PIN);
+//  lcd.setCursor(0,0); 
+//  lcd.print("Temp: ");
+//  lcd.print(DHT.temperature);
+//  lcd.print((char)223);
+//  lcd.print("C");
+  Serial.print("Temp:");
+   Serial.println(DHT.temperature);
+//  lcd.setCursor(0,1);
+//  lcd.print("Humidity: ");
+//  lcd.print(DHT.humidity);
+//  lcd.print("%");
+  Serial.print("RH:");
+   Serial.println(DHT.humidity);
+  delay(1000);
+}
+
+void SMOKE()
+{
+  
+  int al=analogRead(A2);
+  if(al>300)
+  {
+    Serial.print(al);
+    Serial.println(" AIR QUALITY IS BAD");
+    
+  }
+  else
+  {
+    Serial.print(al);
+    Serial.println(" AIR QUALITY is GOOD");
+  }
+}
