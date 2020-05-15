@@ -1,0 +1,48 @@
+#include<LiquidCrystal.h>
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+#include<Timer.h>
+#include<ThingSpeak.h>
+Timer t;
+#include <SoftwareSerial.h>
+SoftwareSerial Serial1(6, 7);
+#include <dht.h>
+dht DHT;
+//#define heart 13
+int gassen1=A0;
+int gassen2=A1;
+int gassen3=A2;
+int valuesen1;
+int valuesen2;
+int valuesen3;
+#define DHT11_PIN 9                             
+
+
+char *api_key="UWHGZ1RCB0SDVV71";     // Enter your Write API key from ThingSpeak
+static char postUrl[150];
+void httpGet(String ip, String path, int port=80);
+
+
+void setup()
+{
+ Serial1.begin(9600);
+ Serial.begin(9600);
+ lcd.clear();
+ lcd.print("WIFI Connecting");
+ lcd.setCursor(0,1);
+ lcd.print("Please wait....");
+
+ 
+ Serial.println("Connecting Wifi....");
+ connect_wifi("AT",1000);
+ connect_wifi("AT+CWMODE=1",1000);
+ connect_wifi("AT+CWQAP",1000);  
+ connect_wifi("AT+RST",5000);
+ connect_wifi("AT+CWJAP=\"TP-Link_C980\",\"41596715\"",10000);
+ Serial.println("Wifi Connected"); 
+ lcd.clear();
+ lcd.print("WIFI Connected.");
+ //pinMode(heart, OUTPUT);
+ delay(5000);
+ //t.oscillate(heart, 1000, LOW);
+ t.every(20000, send2server);
+}
